@@ -1,0 +1,27 @@
+import java.util.Scanner;
+public class DaysOfMonth {
+	public static void main(String args[]) {
+		String[] month = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+		String[] monthAbbre = {"Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." };
+		int[] DayOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+		Scanner keyboard = new Scanner(System.in);
+		System.out.print("Enter month: ");
+		String inputMonth = keyboard.nextLine();
+		System.out.print("Enter year: ");
+		int year = keyboard.nextInt();
+		if(inputMonth.equals(monthAbbre[i])) {
+			System.out.print("OK");
+		}
+//		for(int i = 0; i < 12; i++) {
+//			if(inputMonth.equals(month[i]) || Integer.parseInt(inputMonth) == i + 1 || inputMonth.equals(monthAbbre[i]) || inputMonth.equals(monthAbbre[i].substring(3))) {
+//				if(i == 1 && year%4 == 0 && (year%100 != 0 && year%4s00 == 0)) {
+//					System.out.println("29");
+//					break;
+//				};
+//				System.out.println(DayOfMonth[i]);
+//				break;
+//			}
+//			System.out.println("Invalid");
+		}
+	}
+}
