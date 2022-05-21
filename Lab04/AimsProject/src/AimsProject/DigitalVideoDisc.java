@@ -12,6 +12,9 @@ public class DigitalVideoDisc {
 	public String getTitle() {
 		return title;
 	}
+	public int getId() {
+		return id;
+	}
 	public String getCategory() {
 		return category;
 	}
