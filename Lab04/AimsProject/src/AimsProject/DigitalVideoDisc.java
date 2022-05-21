@@ -1,11 +1,13 @@
 package AimsProject;
+import java.time.LocalDateTime;
+
 public class DigitalVideoDisc {
 	private String title;
 	private String category;
 	private String director;
 	private int length;
 	private float cost;
-	private java.time.LocalDate dateAdded;
+	private LocalDateTime dateAdded;
 	private static int nbDigitalVideoDiscs = 0;
 	private int id;
 	
@@ -40,6 +42,7 @@ public class DigitalVideoDisc {
 		this.category = category;
 		this.director = director;
 		this.cost = cost;
+		this.dateAdded = LocalDateTime.now();
 	}
 	public DigitalVideoDisc(String title, String category, float cost) {
 		super();
@@ -48,6 +51,7 @@ public class DigitalVideoDisc {
 		this.title = title;
 		this.category = category;
 		this.cost = cost;
+		this.dateAdded = LocalDateTime.now();
 	}
 	public DigitalVideoDisc(String title, String category, String director, int length, float cost) {
 		super();
@@ -58,6 +62,7 @@ public class DigitalVideoDisc {
 		this.director = director;
 		this.length = length;
 		this.cost = cost;
+		this.dateAdded = LocalDateTime.now();
 	}
 	public float getCost() {
 		return cost;
