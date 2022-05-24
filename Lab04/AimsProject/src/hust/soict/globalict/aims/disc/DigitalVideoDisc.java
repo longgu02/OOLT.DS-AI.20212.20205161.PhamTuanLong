@@ -1,5 +1,6 @@
-package AimsProject;
+package hust.soict.globalict.aims.disc;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 public class DigitalVideoDisc {
 	private String title;
@@ -66,5 +67,19 @@ public class DigitalVideoDisc {
 	}
 	public float getCost() {
 		return cost;
+	}
+	public String toString() {
+		String str = this.getTitle() + " - " + this.getCategory() + " - " + this.getDirector() + " - " + this.getLength() + ": " + this.getCost() + "$";
+		return str;
+	}
+	public boolean isMatch(String title) {
+		String[] searchTokens = title.toLowerCase().split(" ");
+		String[] dvdTokens = this.getTitle().toLowerCase().split(" ");
+		for(String token : searchTokens) {
+			if(Arrays.asList(dvdTokens).contains(token)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

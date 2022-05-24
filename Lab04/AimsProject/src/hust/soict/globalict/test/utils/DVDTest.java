@@ -1,4 +1,7 @@
-package AimsProject;
+package hust.soict.globalict.test.utils;
+
+import hust.soict.globalict.aims.disc.DigitalVideoDisc;
+import hust.soict.globalict.aims.utils.DVDUtils;
 
 public class DVDTest {
 	public static void main(String[] args) {
@@ -18,15 +21,10 @@ public class DVDTest {
 			System.out.println(sorted[i].toString());
 		}
 		
-//		sorted = DVDUtils.sortByTitle(new DigitalVideoDisc[] {dvd1, dvd2, dvd3, dvd4, dvd5});
+		sorted = DVDUtils.sortByTitle(new DigitalVideoDisc[] {dvd1, dvd2, dvd3, dvd4, dvd5});
 		System.out.println("sort by title ");
 		for(int i = 0; i < sorted.length; i++) {
 			System.out.println(sorted[i].toString());
-		}
-		DigitalVideoDisc[] itemSort = DVDUtils.sortByCost(itemsOrdered);
-		System.out.println("Sort");
-		for(int i = 0; i < itemSort.length; i++) {
-			System.out.println(itemSort[i]);
 		}
 	}
 }

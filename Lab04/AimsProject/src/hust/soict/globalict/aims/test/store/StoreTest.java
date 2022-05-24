@@ -1,4 +1,7 @@
-package AimsProject;
+package hust.soict.globalict.aims.test.store;
+
+import hust.soict.globalict.aims.disc.DigitalVideoDisc;
+import hust.soict.globalict.aims.store.Store;
 
 public class StoreTest {
 	public static void main(String[] args) {
@@ -24,6 +27,5 @@ public class StoreTest {
 			if(dvdStored[i] == null) break;
 			System.out.println(dvdStored[i].getTitle());
 		}
-		
 	}
 }
