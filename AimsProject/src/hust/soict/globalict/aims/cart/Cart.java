@@ -1,33 +1,25 @@
 package hust.soict.globalict.aims.cart;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import hust.soict.globalict.aims.disc.DigitalVideoDisc;
+import hust.soict.globalict.aims.media.DigitalVideoDisc;
+import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.utils.DVDUtils;
-import java.util.Arrays;
 public class Cart {
 	public static final int MAX_NUMBERS_ORDERED = 20;
-	private DigitalVideoDisc [] itemsOrdered = new DigitalVideoDisc[MAX_NUMBERS_ORDERED];
-	private int qtyOrdered = 0;
-	public void addDigitalVideoDisc(DigitalVideoDisc disc) {
-		if(qtyOrdered != MAX_NUMBERS_ORDERED) {
-			itemsOrdered[qtyOrdered++] = disc;			
-		}
-	}
+	private ArrayList<Media> itemsOrdered = new ArrayList<Media>;
+	
 	public DigitalVideoDisc[] getItemsOrdered() {
 		return itemsOrdered;
 	}
-	public boolean removeDigitalVideoDisc(DigitalVideoDisc disc) {
-		DigitalVideoDisc[] newItemsOrdered = new DigitalVideoDisc[MAX_NUMBERS_ORDERED];
-		boolean isSuccessful = false;
-		for(int i = 0, k = 0; i < qtyOrdered; i++) {
-			if(itemsOrdered[i].getTitle().equals(disc.getTitle())) {
-				isSuccessful = true;
-				continue;
-			}
-			newItemsOrdered[k++] = itemsOrdered[i];	
-		}
-		itemsOrdered = newItemsOrdered;
-		if(isSuccessful) qtyOrdered--;
-		return isSuccessful;
+
+	public void addMedia(Media media) {
+		// Consider the circumstances that cannot add
+		itemsOrdered.add(media);
+	}
+	public boolean removeMedia(Media media) {
+		itemsOrdered.remove(media);
 	}
 	
 //	public void addDigitalVideoDisc(DigitalVideoDisc [] dvdList) {
@@ -61,10 +53,9 @@ public class Cart {
 	}
 	
 	public float totalCost() {
-		float total = 0;
-		for(int i = 0; i < qtyOrdered; i++) {
-			total += itemsOrdered[i].getCost();
-		}
+		// Need to fix
+		Stream<Media> filtered = itemsOrdered.stream().filter(media -> media.cost());
+		float total = filtered.collect(Collectors.summingDouble(media -> media.getCost()));
 		return total;
 	}
 	// Increasing (Currently decreasing)
