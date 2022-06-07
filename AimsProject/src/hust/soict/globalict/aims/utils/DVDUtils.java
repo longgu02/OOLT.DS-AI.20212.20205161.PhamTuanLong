@@ -1,6 +1,6 @@
 package hust.soict.globalict.aims.utils;
 
-import hust.soict.globalict.aims.disc.DigitalVideoDisc;
+import hust.soict.globalict.aims.media.DigitalVideoDisc;
 
 public class DVDUtils {
 	// Compare by cost
