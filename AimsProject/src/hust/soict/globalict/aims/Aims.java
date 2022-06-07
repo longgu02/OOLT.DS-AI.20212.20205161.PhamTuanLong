@@ -1,50 +1,79 @@
 package hust.soict.globalict.aims;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Scanner;
+
 import hust.soict.globalict.aims.cart.Cart;
+import hust.soict.globalict.aims.comparator.MediaSortByCost;
+import hust.soict.globalict.aims.comparator.MediaSortByTitle;
+import hust.soict.globalict.aims.media.Book;
+import hust.soict.globalict.aims.media.CompactDisc;
 import hust.soict.globalict.aims.media.DigitalVideoDisc;
+import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.store.Store;
+import hust.soict.globalict.aims.thread.MemoryDaemon;
+import hust.soict.globalict.aims.thread.MyThread;
 
 public class Aims {
 	private static Store store = new Store();
 	private static Cart cart = new Cart();
 	
 	public static void placeOrder() {
-        if (cart.getItemsOrdered().length > 0) {
+        if (cart.getItemsOrdered().size() > 0) {
             System.out.println("Order is created.");
+            cart.getALuckyItem();
+            cart.printCart();
             cart = new Cart();
         }
         else {
             System.out.println("Your cart is empty.");
         }
 	}
-	public static void sortDVDInCart() {
+	//Fix
+	public static void sortMediaInCart() {
 		Scanner keyboard = new Scanner(System.in);
+		ArrayList<Media> itemsOrdered = cart.getItemsOrdered();
 		System.out.println("Sort by Title or Cost? (t/c)");
 		char sortChoice = keyboard.next().charAt(0);
 		if(sortChoice == 't') {
-			cart.sortByTitle();
+			Collections.sort(itemsOrdered,new MediaSortByTitle());  
+			Iterator<Media> itr=itemsOrdered.iterator();  
+			while(itr.hasNext()){  
+				Media curMedia = (Media)itr.next();  
+				if(curMedia == null) break;
+				System.out.println(curMedia.toString());
+			}  
 		}else if(sortChoice == 'c') {
-			cart.sortByCost();
+			Collections.sort(itemsOrdered,new MediaSortByCost());  
+			Iterator<Media> itr=itemsOrdered.iterator();  
+			while(itr.hasNext()){  
+				Media curMedia = (Media)itr.next();  
+				if(curMedia == null) break;
+				System.out.println(curMedia.toString());
+			}  
 		}else {
 			System.out.print( "\"" + sortChoice + "\" not exist");
 		}
 	}
-	
-	public static void removeDVDFromCart() {
+	//Fix
+	public static void removeMediaFromCart() {
 		Scanner keyboard = new Scanner(System.in);
 		cart.printCart();
 		System.out.println("Enter the id");
 		int idDelete = Integer.parseInt(keyboard.nextLine()); 
-		DigitalVideoDisc result = cart.searchItemById(idDelete);
+		Media result = cart.searchItemById(idDelete);
 		if(result != null) {
-			cart.removeDigitalVideoDisc(result);					
-			cart.printCart();
+			boolean removed = cart.removeMedia(result);
+			if(removed) {
+				cart.printCart();				
+			}
 		}else {
-			System.out.println("DVD with the id \"" + idDelete + "\" not found");
+			System.out.println("Media with the id \"" + idDelete + "\" not found");
 		}
 	}
 	
-	public static void filterDVDInCart() {
+	public static void filterMediaInCart() {
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Do you want to filer by ID or by Title? (i/t)");
 		char sortChoice = keyboard.next().charAt(0);
@@ -62,52 +91,77 @@ public class Aims {
 		}			
 	}
 	
-	public static void addDVDToCart() {
+	public static void addMediaToCart() {
 		Scanner keyboard = new Scanner(System.in);
 		store.printStore();
-		System.out.println("Enter the dvd's title: ");
+		System.out.println("Enter the Media's title: ");
 		String titleSearch = keyboard.nextLine().strip();
-		DigitalVideoDisc[] result = store.searchByTitle(titleSearch);
+		// Maybe search by exact title?
+		Media[] result = store.searchByTitle(titleSearch);
 		if(result == null) {
-			System.out.println("No dvd found");
+			System.out.println("No Media found");
 			return;
 		}
-		cart.addDigitalVideoDisc(store.searchByTitle(titleSearch));					
+		cart.addMedia(store.searchByTitle(titleSearch));					
 		cart.printCart();
-		
 	}
 	
-	public static void seeDVDDetail() {
+	public static void seeMediaDetail() {
 		Scanner keyboard = new Scanner(System.in);
-		System.out.println("Enter DVD's title: ");
+		System.out.println("Enter Media's title: ");
 		String titleStr = keyboard.nextLine();
-		store.dvdDetail(titleStr);
+		store.MediaDetail(titleStr);
 	}
 	
 	public static void updateStore() {
 		Scanner keyboard = new Scanner(System.in);
-		System.out.println("You want to add or remove dvd? (a/r)");
+		System.out.println("You want to add or remove Media? (a/r)");
 		char updateChoice = keyboard.next().charAt(0);
 		keyboard.nextLine();
 		if(updateChoice == 'a') {
+			System.out.print("Type of Media (Book/DVD/CD - 1/2/3): ");
+			int newType = Integer.parseInt(keyboard.nextLine());
 			System.out.print("Title: ");
 			String newTitle = keyboard.nextLine();
 			System.out.print("Category: ");
 			String newCategory = keyboard.nextLine();
-			System.out.print("Director: ");
-			String newDirector = keyboard.nextLine();
-			System.out.print("Length: ");
-			int newLength = Integer.parseInt(keyboard.nextLine());
 			System.out.print("Cost: ");
 			float newCost =	Float.parseFloat(keyboard.nextLine());
-			store.addDVD(new DigitalVideoDisc(newTitle, newCategory, newDirector, newLength, newCost));					
+			switch(newType) {
+				case 1:
+					Book newBook = new Book(newTitle, newCategory, newCost);
+					System.out.print("Number of Authors (positive): ");
+					int numOfAuth = Integer.parseInt(keyboard.nextLine());
+					if(numOfAuth <= 0) {
+						System.out.println("So this book dont have author.");
+					}
+					for(int i = 0; i < numOfAuth; i++) {
+						System.out.print("Enter name of author " + i+1 + ": ");
+						String newAuthorName = keyboard.nextLine();
+						newBook.addAuthor(newAuthorName);
+					}
+					store.addMedia(newBook);
+					break;	
+				case 2:
+					System.out.print("Director: ");
+					String newDirector = keyboard.nextLine();
+					System.out.print("Length: ");
+					int newLength = Integer.parseInt(keyboard.nextLine());
+					store.addMedia(new DigitalVideoDisc(newTitle, newCategory, newDirector, newLength, newCost));
+					break;
+				case 3:
+					System.out.print("Artist: ");
+					String newArtist = keyboard.nextLine();
+					store.addMedia(new CompactDisc(newTitle, newCategory, newArtist, newCost));
+					break;
+			}		
 		}else if(updateChoice == 'r') {
 			System.out.print("Enter the title: ");
 			String title = keyboard.nextLine().strip();
-			DigitalVideoDisc[] dvds = store.searchByTitle(title);
-			for(DigitalVideoDisc dvd: dvds) {
-				if(dvd != null) {
-					store.removeDVD(dvd);
+			Media[] Medias = store.searchByTitle(title);
+			for(Media Media: Medias) {
+				if(Media != null) {
+					store.removeMedia(Media);
 					store.printStore();
 				}else {
 					break;
@@ -155,8 +209,8 @@ public class Aims {
 		while(true) {
 			System.out.println("Options: ");
 			System.out.println("--------------------------------");
-			System.out.println("1. See a DVD’s details");
-			System.out.println("2. Add a DVD to cart");
+			System.out.println("1. See a Media’s details");
+			System.out.println("2. Add a Media to cart");
 			System.out.println("3. See current cart");
 			System.out.println("0. Back");
 			System.out.println("--------------------------------");
@@ -165,10 +219,10 @@ public class Aims {
 			int choice = Integer.parseInt(keyboard.nextLine());
 			switch(choice) {
 			case 1:
-				seeDVDDetail();
+				seeMediaDetail();
 				break;
 			case 2:
-				addDVDToCart();
+				addMediaToCart();
 				break;
 			case 3:
 				cartMenu();
@@ -188,9 +242,9 @@ public class Aims {
 		while(true) {
 			System.out.println("Options: ");
 			System.out.println("--------------------------------");
-			System.out.println("1. Filter DVDs in cart");
-			System.out.println("2. Sort DVDs in cart");
-			System.out.println("3. Remove DVD from cart");
+			System.out.println("1. Filter Medias in cart");
+			System.out.println("2. Sort Medias in cart");
+			System.out.println("3. Remove Media from cart");
 			System.out.println("4. Place order");
 			System.out.println("0. Back");
 			System.out.println("--------------------------------");
@@ -199,13 +253,13 @@ public class Aims {
 			int choice = Integer.parseInt(keyboard.nextLine());
 			switch(choice) {
 			case 1:
-				filterDVDInCart();
+				filterMediaInCart();
 				break;
 			case 2:
-				sortDVDInCart();
+				sortMediaInCart();
 				break;
 			case 3:
-				removeDVDFromCart();
+				removeMediaFromCart();
 				break;
 			case 4:
 				placeOrder();
@@ -223,6 +277,16 @@ public class Aims {
 		}
 	}
 	public static void main(String[] args) {
+//		MemoryDaemon myMemoryDaemon = new MemoryDaemon();
+//		MyThread myThread1 = new MyThread();
+//		MyThread myThread2 = new MyThread();
+//		myThread1.setDaemon(true);
+//		myThread2.setDaemon(true);
+//		myThread1.start();
+//		myThread2.start();
+//		
+//
+//		myMemoryDaemon.run();
 		showMenu();
 	}
 }

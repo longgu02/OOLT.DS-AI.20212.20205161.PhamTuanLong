@@ -1,14 +1,17 @@
 package hust.soict.globalict.aims.store;
 
 import hust.soict.globalict.aims.media.DigitalVideoDisc;
+import hust.soict.globalict.aims.media.Book;
+import hust.soict.globalict.aims.media.CompactDisc;
+import hust.soict.globalict.aims.media.Media;
 
 public class Store {
 	// Initialize the qty counter
 	int MAX_ORDERED_PROD = 100;
-	private DigitalVideoDisc itemsInStore[] = new DigitalVideoDisc[MAX_ORDERED_PROD];
+	private Media itemsInStore[] = new Media[MAX_ORDERED_PROD];
 	
-	public void addDVD(DigitalVideoDisc dvd) {
-		if(dvd.getTitle() == null || dvd.getTitle().equals("") || !dvd.getTitle().matches("[a-zA-Z]*")) {
+	public void addMedia(Media Media) {
+		if(Media.getTitle() == null || Media.getTitle().equals("")) {
 			System.out.println("Entered Title is not valid");
 			return;
 		}
@@ -16,63 +19,78 @@ public class Store {
 		while(itemsInStore[i] != null) {
 			i++;
 		};
-		itemsInStore[i] = dvd;
+		itemsInStore[i] = Media;
 		System.out.println("Added " + itemsInStore[i]);
 	}
 	
-	public void dvdDetail(String title) {
+	public void MediaDetail(String title) {
+		boolean found = false;
 		// Validation
-		if(title == null || title.equals("") || !title.matches("[a-zA-Z]*")) {
-			System.out.println("Entered Title is not valid");
+		if(title == null || title.equals("")) {
+			System.out.println("Entered title is not valid");
 			return;
 		}
-		for(DigitalVideoDisc dvd : itemsInStore) {
-			if(dvd == null) break;
-			if(dvd.isMatch(title)) {
-				System.out.println(dvd.toString());
-				
-				return;
+		for(Media media : itemsInStore) {
+			if(media == null) break;
+			if(media.isMatch(title)) {
+				System.out.println(media.toString());
+				found = true;
 			}
 		}
-		System.out.println("DVD with title \"" + title + "\" not found");
+		if(!found) System.out.println("Media with title \"" + title + "\" not found");
 		return;
 	}
 	
-	public DigitalVideoDisc[] getItemsInStore() {
+	public Media[] getItemsInStore() {
 		return itemsInStore;
 	}
 
-	public void removeDVD(DigitalVideoDisc dvd) {
+	public void removeMedia(Media Media) {
 		int i = 0, k = 0;
-		DigitalVideoDisc newItemsInStore[] = new DigitalVideoDisc[MAX_ORDERED_PROD];
+		boolean removed = false;
+		Media newItemsInStore[] = new Media[MAX_ORDERED_PROD];
 		while(itemsInStore[i] != null) {
-			if(itemsInStore[i] == dvd) {
+			if(itemsInStore[i] == Media) {
 				System.out.println("Removed " + itemsInStore[i].getTitle());
 				i++;
+				removed = true;
 				continue;
 			}
 			newItemsInStore[k++] = itemsInStore[i++];
 		}
 		itemsInStore = newItemsInStore;
+		if(!removed) {
+			System.out.println("Error");
+		}
 	}
 	
 	public void printStore() {
 			System.out.println("***********************STORE***********************");
-			for(DigitalVideoDisc dvd : itemsInStore) {
-				if(dvd == null) break;
-				System.out.println(dvd.getId() + ". DVD - " + dvd.toString());
+			for(Media media : itemsInStore) {
+				if(media == null) break;
+				if(media instanceof DigitalVideoDisc) {
+					System.out.println(media.getId() + ". DVD - " + media.toString());
+				}else if(media instanceof CompactDisc) {
+					System.out.println(media.getId() + ". CD - " + media.toString());
+				}else if(media instanceof Book) {
+					System.out.println(media.getId() + ". Book - " + media.toString());
+				}
+				
 			};
 			System.out.println("***************************************************");
 	}
 	
-	public DigitalVideoDisc[] searchByTitle(String title) {
-		DigitalVideoDisc[] result = new DigitalVideoDisc[20];
+	public Media[] searchByTitle(String title) {
+		Media[] result = new Media[20];
 		int counter = 0;
-		for(DigitalVideoDisc dvd : itemsInStore) {
-			if(dvd == null) break;
-			if(dvd.isMatch(title)) {
-				result[counter++] = dvd;
+		for(Media media : itemsInStore) {
+			if(media == null) break;
+			if(media.isMatch(title)) {
+				result[counter++] = media;
 			}
+		}
+		if(counter == 0) {
+			System.out.println("Item with the title " + title + " not exist");
 		}
 		return result;
 	}

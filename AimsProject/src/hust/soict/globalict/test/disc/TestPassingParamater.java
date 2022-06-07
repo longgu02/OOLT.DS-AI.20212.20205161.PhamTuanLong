@@ -1,6 +1,7 @@
 package hust.soict.globalict.test.disc;
 
 import hust.soict.globalict.aims.media.DigitalVideoDisc;
+import hust.soict.globalict.aims.media.Media;
 
 public class TestPassingParamater {
 	static class dvdWrapper{
@@ -40,9 +41,9 @@ public class TestPassingParamater {
 //		o2 = temp;
 //	}
 	
-	public static void changeTitle(DigitalVideoDisc dvd, String title) {
-		String oldTitle = dvd.getTitle();
-		dvd.setTitle(title);
-		dvd = new DigitalVideoDisc(oldTitle);
+	public static void changeTitle(Media media, String title) {
+		String oldTitle = media.getTitle();
+		media.setTitle(title);
+		media = new DigitalVideoDisc(oldTitle);			
 	}
 }
