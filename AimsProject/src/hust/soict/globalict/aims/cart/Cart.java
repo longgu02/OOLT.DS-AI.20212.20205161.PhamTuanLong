@@ -3,8 +3,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import hust.soict.globalict.aims.comparator.MediaSortByTitle;
 import hust.soict.globalict.aims.media.Media;
+import hust.soict.globalict.aims.playable.Playable;
 public class Cart {
 	public static final int MAX_NUMBERS_ORDERED = 20;
 	private ArrayList<Media> itemsOrdered = new ArrayList<Media>();
@@ -102,7 +102,7 @@ public class Cart {
 	
 	public final ArrayList<Media> sortByTitle() {
 		ArrayList<Media> itemsDisplay = this.getItemsOrdered();; // immutability
-		Collections.sort(itemsDisplay,new MediaSortByTitle());  
+		Collections.sort(itemsDisplay,Media.COMPARE_BY_TITLE_COST);  
 		return itemsDisplay;
 	}
 	
@@ -124,6 +124,13 @@ public class Cart {
 			return;
 		}
 	}
+	
+	public void play(Media media) {
+		if(media instanceof Playable) {
+			((Playable) media).play();
+		}
+	}
+	
 	public Media getALuckyItem() {
 		int numOfItem  = itemsOrdered.size();
 		if(numOfItem >= 5) {

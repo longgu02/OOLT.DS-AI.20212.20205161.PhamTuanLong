@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 import hust.soict.globalict.aims.cart.Cart;
-import hust.soict.globalict.aims.comparator.MediaSortByCost;
-import hust.soict.globalict.aims.comparator.MediaSortByTitle;
 import hust.soict.globalict.aims.media.Book;
 import hust.soict.globalict.aims.media.CompactDisc;
 import hust.soict.globalict.aims.media.DigitalVideoDisc;
@@ -37,7 +35,7 @@ public class Aims {
 		System.out.println("Sort by Title or Cost? (t/c)");
 		char sortChoice = keyboard.next().charAt(0);
 		if(sortChoice == 't') {
-			Collections.sort(itemsOrdered,new MediaSortByTitle());  
+			Collections.sort(itemsOrdered,Media.COMPARE_BY_TITLE_COST);  
 			Iterator<Media> itr=itemsOrdered.iterator();  
 			while(itr.hasNext()){  
 				Media curMedia = (Media)itr.next();  
@@ -45,7 +43,7 @@ public class Aims {
 				System.out.println(curMedia.toString());
 			}  
 		}else if(sortChoice == 'c') {
-			Collections.sort(itemsOrdered,new MediaSortByCost());  
+			Collections.sort(itemsOrdered,Media.COMPARE_BY_COST_TITLE);  
 			Iterator<Media> itr=itemsOrdered.iterator();  
 			while(itr.hasNext()){  
 				Media curMedia = (Media)itr.next();  

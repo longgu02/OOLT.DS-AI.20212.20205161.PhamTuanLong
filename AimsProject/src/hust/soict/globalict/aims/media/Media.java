@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import hust.soict.globalict.aims.comparator.MediaSortByCost;
-import hust.soict.globalict.aims.comparator.MediaSortByTitle;
+import hust.soict.globalict.aims.comparator.MediaSortByCostTitle;
+import hust.soict.globalict.aims.comparator.MediaSortByTitleCost;
 
 public class Media {
 	private int id;
@@ -76,7 +76,7 @@ public class Media {
 	
 
 	
-	public static Comparator<Media> SORT_BY_COST = new MediaSortByCost();
-	public static Comparator<Media> SORT_BY_TITLE = new MediaSortByTitle();
+	public static final Comparator<Media> COMPARE_BY_COST_TITLE = new MediaSortByCostTitle();
+	public static final Comparator<Media> COMPARE_BY_TITLE_COST = new MediaSortByTitleCost();
 	
 }
