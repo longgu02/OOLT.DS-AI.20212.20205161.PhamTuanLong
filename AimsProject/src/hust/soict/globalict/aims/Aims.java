@@ -59,7 +59,9 @@ public class Aims {
 		ArrayList<Media> itemsOrdered = cart.getItemsOrdered();
 		System.out.println("Sort by Title or Cost? (t/c)");
 		char sortChoice = keyboard.next().charAt(0);
+		
 		if(sortChoice == 't') {
+			System.out.println("***********************CART***********************");
 			Collections.sort(itemsOrdered,Media.COMPARE_BY_TITLE_COST);  
 			Iterator<Media> itr=itemsOrdered.iterator();  
 			while(itr.hasNext()){  
@@ -67,7 +69,9 @@ public class Aims {
 				if(curMedia == null) break;
 				System.out.println(curMedia.toString());
 			}  
+			System.out.println("**************************************************");
 		}else if(sortChoice == 'c') {
+			System.out.println("***********************CART***********************");
 			Collections.sort(itemsOrdered,Media.COMPARE_BY_COST_TITLE);  
 			Iterator<Media> itr=itemsOrdered.iterator();  
 			while(itr.hasNext()){  
@@ -75,6 +79,7 @@ public class Aims {
 				if(curMedia == null) break;
 				System.out.println(curMedia.toString());
 			}  
+			System.out.println("**************************************************");
 		}else {
 			System.out.print( "\"" + sortChoice + "\" not exist");
 		}
