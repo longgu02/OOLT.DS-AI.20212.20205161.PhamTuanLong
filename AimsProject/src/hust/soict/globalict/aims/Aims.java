@@ -319,10 +319,11 @@ public class Aims {
 //
 //		myMemoryDaemon.run();
 		Media media1 = new DigitalVideoDisc("Star Wars", "Science Fiction", "George Lucas", 87, 24.95f);
-		Media media2 = new DigitalVideoDisc("Star Wars", "Science Fiction", "George Lucas", 87, 24.95f);
+		Media media2 = new DigitalVideoDisc("Star Warss", "Science Fiction", "George Lucas", 87, 24.95f);
 		Object hehe = new Object();
-		if(media1.equals(hehe)) System.out.println("True");
-		else System.out.println("False");
+//		if(media1.equals(hehe)) System.out.println("True");
+//		else System.out.println("False");
+		System.out.println(media1.compareTo(media2));
 		showMenu();
 	}
 }

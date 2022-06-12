@@ -22,6 +22,7 @@ public class Book extends Media{
 	public String toString() {
 		return this.getTitle() + " - " + this.getCategory() + ": " + this.getCost() + "$";
 	}
+	
 	public void removeAuthor(String authorName) {
 		if(authors.contains(authorName)){
 			authors.remove(authorName);
