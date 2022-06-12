@@ -5,15 +5,12 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 import hust.soict.globalict.aims.cart.Cart;
-import hust.soict.globalict.aims.comparator.MediaSortByCost;
-import hust.soict.globalict.aims.comparator.MediaSortByTitle;
 import hust.soict.globalict.aims.media.Book;
 import hust.soict.globalict.aims.media.CompactDisc;
 import hust.soict.globalict.aims.media.DigitalVideoDisc;
 import hust.soict.globalict.aims.media.Media;
+import hust.soict.globalict.aims.playable.Playable;
 import hust.soict.globalict.aims.store.Store;
-import hust.soict.globalict.aims.thread.MemoryDaemon;
-import hust.soict.globalict.aims.thread.MyThread;
 
 public class Aims {
 	private static Store store = new Store();
@@ -30,28 +27,59 @@ public class Aims {
             System.out.println("Your cart is empty.");
         }
 	}
+	
+	public static void playMediaInCart() {
+		Scanner keyboard = new Scanner(System.in);
+		System.out.println("Enter the media title that you want to play");
+		String searchTitle = keyboard.nextLine();
+		ArrayList<Media> matchMedias = cart.searchItemByTitle(searchTitle);
+		for(Media media: matchMedias) {
+			cart.play(media);
+		}
+	}
+	
+	public static void playMedia() {
+		Scanner keyboard = new Scanner(System.in);
+		System.out.println("Enter the media title that you want to play");
+		String searchTitle = keyboard.nextLine();
+		Media[] matchMedia = store.searchByTitle(searchTitle);
+		for(Media media: matchMedia) {
+			if(media == null) break;
+			if(media instanceof Playable) {
+				((Playable) media).play();
+			}else {
+				System.out.println("Cannot play this type of Media (" + media.toString() + ")");
+			}
+		}
+	}
+	
 	//Fix
 	public static void sortMediaInCart() {
 		Scanner keyboard = new Scanner(System.in);
 		ArrayList<Media> itemsOrdered = cart.getItemsOrdered();
 		System.out.println("Sort by Title or Cost? (t/c)");
 		char sortChoice = keyboard.next().charAt(0);
+		
 		if(sortChoice == 't') {
-			Collections.sort(itemsOrdered,new MediaSortByTitle());  
+			System.out.println("***********************CART***********************");
+			Collections.sort(itemsOrdered,Media.COMPARE_BY_TITLE_COST);  
 			Iterator<Media> itr=itemsOrdered.iterator();  
 			while(itr.hasNext()){  
 				Media curMedia = (Media)itr.next();  
 				if(curMedia == null) break;
 				System.out.println(curMedia.toString());
 			}  
+			System.out.println("**************************************************");
 		}else if(sortChoice == 'c') {
-			Collections.sort(itemsOrdered,new MediaSortByCost());  
+			System.out.println("***********************CART***********************");
+			Collections.sort(itemsOrdered,Media.COMPARE_BY_COST_TITLE);  
 			Iterator<Media> itr=itemsOrdered.iterator();  
 			while(itr.hasNext()){  
 				Media curMedia = (Media)itr.next();  
 				if(curMedia == null) break;
 				System.out.println(curMedia.toString());
 			}  
+			System.out.println("**************************************************");
 		}else {
 			System.out.print( "\"" + sortChoice + "\" not exist");
 		}
@@ -102,7 +130,7 @@ public class Aims {
 			System.out.println("No Media found");
 			return;
 		}
-		cart.addMedia(store.searchByTitle(titleSearch));					
+		cart.addMedia(result);
 		cart.printCart();
 	}
 	
@@ -212,6 +240,7 @@ public class Aims {
 			System.out.println("1. See a Media’s details");
 			System.out.println("2. Add a Media to cart");
 			System.out.println("3. See current cart");
+			System.out.println("4. Play a Media");
 			System.out.println("0. Back");
 			System.out.println("--------------------------------");
 			System.out.println("Please choose a number: 0-1-2-3");
@@ -226,6 +255,9 @@ public class Aims {
 				break;
 			case 3:
 				cartMenu();
+				break;
+			case 4:
+				playMedia();
 				break;
 			case 0:
 				break;
@@ -245,7 +277,8 @@ public class Aims {
 			System.out.println("1. Filter Medias in cart");
 			System.out.println("2. Sort Medias in cart");
 			System.out.println("3. Remove Media from cart");
-			System.out.println("4. Place order");
+			System.out.println("4. Play Media in cart");
+			System.out.println("5. Place order");
 			System.out.println("0. Back");
 			System.out.println("--------------------------------");
 			System.out.println("Please choose a number: 0-1-2-3-4");
@@ -262,6 +295,9 @@ public class Aims {
 				removeMediaFromCart();
 				break;
 			case 4:
+				playMediaInCart();
+				break;
+			case 5:
 				placeOrder();
 				break;
 			case 0:
@@ -287,6 +323,12 @@ public class Aims {
 //		
 //
 //		myMemoryDaemon.run();
+		Media media1 = new DigitalVideoDisc("Star Wars", "Science Fiction", "George Lucas", 87, 24.95f);
+		Media media2 = new DigitalVideoDisc("Star Warss", "Science Fiction", "George Lucas", 87, 24.95f);
+		Object hehe = new Object();
+//		if(media1.equals(hehe)) System.out.println("True");
+//		else System.out.println("False");
+		System.out.println(media1.compareTo(media2));
 		showMenu();
 	}
 }

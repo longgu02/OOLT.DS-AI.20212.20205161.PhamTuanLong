@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import hust.soict.globalict.aims.comparator.MediaSortByCost;
-import hust.soict.globalict.aims.comparator.MediaSortByTitle;
+import hust.soict.globalict.aims.comparator.MediaSortByCostTitle;
+import hust.soict.globalict.aims.comparator.MediaSortByTitleCost;
 
-public class Media {
+public class Media implements Comparable<Media>{
 	private int id;
 	private String title;
 	private String category;
@@ -74,9 +74,25 @@ public class Media {
 		return false;
 	}
 	
+	public boolean equals(Object o) {
+		if(!(o instanceof Media)) return false;
+		Media obj = (Media)o;
+		if(obj.getId() == id) {
+			return true;
+		}
+		return false;
+	}
 
+	public int compareTo(Media obj) {
+		if(!(obj instanceof Media)) return -1;
+		Media castMedia = (Media)obj;
+		int compareTitle = title.compareTo(castMedia.getTitle());
+		int compareCategory = category.compareTo(castMedia.getCategory());
+		if(compareTitle == 0) return compareCategory;
+		return compareTitle;
+	}
 	
-	public static Comparator<Media> SORT_BY_COST = new MediaSortByCost();
-	public static Comparator<Media> SORT_BY_TITLE = new MediaSortByTitle();
+	public static final Comparator<Media> COMPARE_BY_COST_TITLE = new MediaSortByCostTitle();
+	public static final Comparator<Media> COMPARE_BY_TITLE_COST = new MediaSortByTitleCost();
 	
 }
