@@ -15,15 +15,33 @@ public class Cart {
 	}
 
 	public void addMedia(Media media) {
+		if(itemsOrdered.size() >= MAX_NUMBERS_ORDERED) {
+			System.out.println("Cart is full");
+			return;
+		}
 		// Consider the circumstances that cannot add
-		itemsOrdered.add(media);	
-		System.out.println("Added " + media.getTitle() + " to cart");
+		if(!itemsOrdered.contains(media)) {
+			itemsOrdered.add(media);	
+			System.out.println("Added " + media.getTitle() + " to cart");			
+		}else {
+			System.out.println(media.getTitle() + " have already been added to cart");
+		}
 	}
 	
 	public void addMedia(Media[] medias) {
 		// Consider the circumstances that cannot add
 		for(Media media: medias) {
-			itemsOrdered.add(media);	
+			if(itemsOrdered.size() >= MAX_NUMBERS_ORDERED) {
+				System.out.println("Cart is full");
+				break;
+			}
+			if(media == null) break;
+			if(!itemsOrdered.contains(media)) {
+				itemsOrdered.add(media);	
+				System.out.println("Added " + media.getTitle() + " to cart");			
+			}else {
+				System.out.println(media.getTitle() + " have already been added to cart");
+			}
 		}
 	}
 	public boolean removeMedia(Media media) {
@@ -54,10 +72,10 @@ public class Cart {
 //		}
 //	}
 	
-	public void addMedia(Media media1, Media media2) {
-		itemsOrdered.add(media1);
-		itemsOrdered.add(media2);
-	}
+//	public void addMedia(Media media1, Media media2) {
+//		itemsOrdered.add(media1);
+//		itemsOrdered.add(media2);
+//	}
 	
 	public float totalCost() {
 		float total = 0;
@@ -125,9 +143,25 @@ public class Cart {
 		}
 	}
 	
+	public ArrayList<Media> searchItemByTitle(String title) {
+		boolean found = false;
+		ArrayList<Media> matchMedias = new ArrayList<Media>();
+		for(Media media : itemsOrdered) {
+			if(media == null) break;
+			if(media.isMatch(title)) {
+				matchMedias.add(media);
+				found = true;
+			}
+		}
+		if(found) return matchMedias;
+		return null;
+	}
+	
 	public void play(Media media) {
 		if(media instanceof Playable) {
 			((Playable) media).play();
+		}else {
+			System.out.println("Cannot play this type of Media (" + media.toString() + ")");
 		}
 	}
 	

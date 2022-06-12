@@ -74,7 +74,14 @@ public class Media {
 		return false;
 	}
 	
-
+	public boolean equals(Object o) {
+		if(!(o instanceof Media)) return false;
+		Media obj = (Media)o;
+		if(obj.getId() == id) {
+			return true;
+		}
+		return false;
+	}
 	
 	public static final Comparator<Media> COMPARE_BY_COST_TITLE = new MediaSortByCostTitle();
 	public static final Comparator<Media> COMPARE_BY_TITLE_COST = new MediaSortByTitleCost();
