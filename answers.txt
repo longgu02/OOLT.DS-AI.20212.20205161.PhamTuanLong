@@ -1,0 +1,15 @@
+SECTION 3: If the passing object is not an instance of Media, what happens?
+ANSWER:
+The program will return runtime error (cast error) that Object can't be cast as 
+a media with the (Media)Object command.
+Solution for this problem is to check whether the Object is an instance of Media 
+or not before casting it to Media.
+SECTION 6:
+Create an ArrayList of Media, then add some media (CD, DVD, or Book) to the list. 
+- Iterate through the list and print out the information of the media by using
+the toString() method.
+Observe what happens and explain it in detail:
+ANSWER:
+The toString() method will return the String that corresponding to the type of Media
+The ArrayList of Media although gives the object with Media type, but its specific type of Media
+overrided the toString() method -> Work properly
