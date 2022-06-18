@@ -38,7 +38,10 @@ public class Book extends Media{
 	
 	@Override
 	public String toString() {
-		int length = (content.split("[\\p{Punct}\\s]+")).length;
+		int length = 0;
+		if(content != null) {
+			length = (content.split("[\\p{Punct}\\s]+")).length;			
+		}
 		return  getTitle() + " - " + getCategory()  + " - "  +  "authors: " + authors + " - content.length: " + length + " - token list: " + contentTokens
 				+ " - word frequency: " + wordFrequency + ": " + getCost() + "$";
 	}
