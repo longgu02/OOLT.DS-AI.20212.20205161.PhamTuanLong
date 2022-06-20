@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -30,10 +31,18 @@ import hust.soict.globalict.aims.store.Store;
 
 public class StoreManagerScreen extends JFrame{
 	private Store store;
+	private AddBookToStoreScreen AddBook;
+	private AddCompactDiscToStoreScreen AddCD;
+	private AddDigitalVideoDiscToStoreScreen AddDVD;
+	private Container cp;
+	private JPanel center;
+	
 	public StoreManagerScreen(Store store) {
 		this.store = store;
-		this.store = store;
-		Container cp = getContentPane();
+		AddDVD = new AddDigitalVideoDiscToStoreScreen(store);
+		AddBook = new AddBookToStoreScreen(store);
+		AddCD = new AddCompactDiscToStoreScreen(store);
+		cp = getContentPane();
 		cp.setLayout(new BorderLayout());
 		cp.add(createNorth(), BorderLayout.NORTH);
 		cp.add(createCenter(), BorderLayout.CENTER);
@@ -61,15 +70,26 @@ public class StoreManagerScreen extends JFrame{
 	JMenuItem createMenuItem(String itemName) {
 		JMenuItem item = new JMenuItem(new AbstractAction(itemName){
 			public void actionPerformed(ActionEvent e) {
-				createMenuBar();
-				JPanel center = new JPanel();
-//				center.setLayout(new GridLayout(3, 3, 2, 2));
-				JLabel title = new JLabel("AIMS");
-				center.add(title);
+				cp.removeAll();
+				cp.add(createNorth(), BorderLayout.NORTH);
+				
+				if(itemName.equals("Add Book")) {
+					cp.add(AddBook.getPanel(), BorderLayout.CENTER);
+				}else if(itemName.equals("Add CD")) {
+					cp.add(AddCD.getPanel(), BorderLayout.CENTER);
+				}else if (itemName.equals("Add DVD")){
+					cp.add(AddDVD.getPanel(), BorderLayout.CENTER);
+				}else if(itemName.equals("View store")){
+					cp.add(createCenter(), BorderLayout.CENTER);
+				}
+				cp.repaint();
+				cp.revalidate();
 			}
 		});
 		return item;
 	}
+	
+	
 	
 	JMenuBar createMenuBar() {
 		JMenu menu = new JMenu("Options");
@@ -79,7 +99,7 @@ public class StoreManagerScreen extends JFrame{
 		smUpdateStore.add(createMenuItem("Add CD"));
 		smUpdateStore.add(createMenuItem("Add DVD"));
 		menu.add(smUpdateStore);
-		menu.add(new JMenuItem("View store"));
+		menu.add(createMenuItem("View store"));
 		menu.add(new JMenuItem("Logout"));
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -88,8 +108,6 @@ public class StoreManagerScreen extends JFrame{
 		
 		return menuBar;
 	}
-	
-
 	
 	JPanel createHeader() {
 		JPanel header= new JPanel();
@@ -107,13 +125,13 @@ public class StoreManagerScreen extends JFrame{
 	}
 	
 	JPanel createCenter() {
-		JPanel center = new JPanel();
+		center = new JPanel();
 		center.setLayout(new GridLayout(3, 3, 2, 2));
 		Cart cart = new Cart();
 		
 		ArrayList<Media> mediaInStore = store.getItemsInStore();
-		for(int i = 0 ; i < 9; i++) {
-			MediaStore cell = new MediaStore(mediaInStore.get(i), cart);
+		for(Media media: mediaInStore) {
+			MediaStore cell = new MediaStore(media, cart);
 			center.add(cell);
 		}
 		return center;
@@ -142,5 +160,6 @@ public class StoreManagerScreen extends JFrame{
 		
 		new StoreManagerScreen(store);
 	}
+
 }
 

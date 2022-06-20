@@ -1,17 +1,23 @@
 package hust.soict.globalict.aims.screen;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import hust.soict.globalict.aims.cart.Cart;
+import hust.soict.globalict.aims.media.CompactDisc;
+import hust.soict.globalict.aims.media.DigitalVideoDisc;
 import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.playable.Playable;
 
@@ -34,6 +40,24 @@ public class MediaStore extends JPanel{
 		
 		if(media instanceof Playable) {
 			JButton playButton = new JButton("Play");
+			playButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					((Playable)media).play();
+					JDialog playDialog = new JDialog();
+					if(media instanceof DigitalVideoDisc) {
+						JLabel playLabel = new JLabel("Playing DVD: " + media.getTitle() + " - " + "DVD length: " + ((DigitalVideoDisc)media).getLength());
+						playDialog.add(playLabel, BorderLayout.CENTER);
+						playDialog.setTitle("Playing DVD");
+					}else if(media instanceof CompactDisc) {
+						JLabel playLabel = new JLabel("Playing CD: " + media.getTitle());
+						playDialog.add(playLabel, BorderLayout.CENTER);
+						playDialog.setTitle("Playing CD: " + media.getTitle());
+					}
+					
+					playDialog.setSize(500,500);
+					playDialog.setVisible(true);
+				}
+			});
 			container.add(playButton);
 		}
 		this.add(Box.createVerticalGlue());
