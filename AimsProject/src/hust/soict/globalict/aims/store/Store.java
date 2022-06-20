@@ -1,14 +1,16 @@
 package hust.soict.globalict.aims.store;
 
-import hust.soict.globalict.aims.media.DigitalVideoDisc;
+import java.util.ArrayList;
+
 import hust.soict.globalict.aims.media.Book;
 import hust.soict.globalict.aims.media.CompactDisc;
+import hust.soict.globalict.aims.media.DigitalVideoDisc;
 import hust.soict.globalict.aims.media.Media;
 
 public class Store {
 	// Initialize the qty counter
 	int MAX_ORDERED_PROD = 100;
-	private Media itemsInStore[] = new Media[MAX_ORDERED_PROD];
+	private ArrayList<Media> itemsInStore = new ArrayList<Media>();
 	
 	public void addMedia(Media Media) {
 		if(Media.getTitle() == null || Media.getTitle().equals("")) {
@@ -16,11 +18,13 @@ public class Store {
 			return;
 		}
 		int i = 0;
-		while(itemsInStore[i] != null) {
-			i++;
-		};
-		itemsInStore[i] = Media;
-		System.out.println("Added " + itemsInStore[i]);
+		
+		if(itemsInStore.contains(Media)) {
+			System.out.println("Media already exists");
+			return;
+		}
+		itemsInStore.add(Media);
+		System.out.println("Added " + Media);
 	}
 	
 	public void MediaDetail(String title) {
@@ -41,7 +45,7 @@ public class Store {
 		return;
 	}
 	
-	public Media[] getItemsInStore() {
+	public ArrayList<Media> getItemsInStore() {
 		return itemsInStore;
 	}
 
@@ -49,16 +53,10 @@ public class Store {
 		int i = 0, k = 0;
 		boolean removed = false;
 		Media newItemsInStore[] = new Media[MAX_ORDERED_PROD];
-		while(itemsInStore[i] != null) {
-			if(itemsInStore[i] == Media) {
-				System.out.println("Removed " + itemsInStore[i].getTitle());
-				i++;
-				removed = true;
-				continue;
-			}
-			newItemsInStore[k++] = itemsInStore[i++];
+		if(itemsInStore.contains(Media)) {
+			itemsInStore.remove(Media);
+			removed = true;
 		}
-		itemsInStore = newItemsInStore;
 		if(!removed) {
 			System.out.println("Error");
 		}

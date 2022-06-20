@@ -1,7 +1,9 @@
 package hust.soict.globalict.aims.test.store;
 
-import hust.soict.globalict.aims.media.Media;
+import java.util.ArrayList;
+
 import hust.soict.globalict.aims.media.DigitalVideoDisc;
+import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.store.Store;
 
 public class StoreTest {
@@ -15,18 +17,18 @@ public class StoreTest {
 		store.addMedia(Media2);
 		store.addMedia(Media3);
 
-		Media[] MediaStored = store.getItemsInStore();
+		ArrayList<Media> MediaStored = store.getItemsInStore();
 		
-		for(int i = 0; i < MediaStored.length; i++) {
-			if(MediaStored[i] == null) break;
-			System.out.println(MediaStored[i].getTitle());
+		for(Media media: MediaStored) {
+			if(media == null) break;
+			System.out.println(media.getTitle());
 		}
 		store.removeMedia(Media1);
 		MediaStored = store.getItemsInStore();
 		
-		for(int i = 0; i < MediaStored.length; i++) {
-			if(MediaStored[i] == null) break;
-			System.out.println(MediaStored[i].getTitle());
+		for(Media media: MediaStored) {
+			if(media == null) break;
+			System.out.println(media.getTitle());
 		}
 	}
 }
