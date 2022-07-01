@@ -1,5 +1,4 @@
 package hust.soict.globalict.aims;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -11,6 +10,7 @@ import hust.soict.globalict.aims.media.DigitalVideoDisc;
 import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.playable.Playable;
 import hust.soict.globalict.aims.store.Store;
+import javafx.collections.ObservableList;
 
 public class Aims {
 	private static Store store = new Store();
@@ -32,7 +32,7 @@ public class Aims {
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Enter the media title that you want to play");
 		String searchTitle = keyboard.nextLine();
-		ArrayList<Media> matchMedias = cart.searchItemByTitle(searchTitle);
+		ObservableList<Media> matchMedias = cart.searchItemByTitle(searchTitle);
 		for(Media media: matchMedias) {
 			cart.play(media);
 		}
@@ -56,7 +56,7 @@ public class Aims {
 	//Fix
 	public static void sortMediaInCart() {
 		Scanner keyboard = new Scanner(System.in);
-		ArrayList<Media> itemsOrdered = cart.getItemsOrdered();
+		ObservableList<Media> itemsOrdered = cart.getItemsOrdered();
 		System.out.println("Sort by Title or Cost? (t/c)");
 		char sortChoice = keyboard.next().charAt(0);
 		

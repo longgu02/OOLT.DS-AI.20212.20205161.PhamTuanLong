@@ -5,12 +5,14 @@ import java.util.List;
 
 import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.playable.Playable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 public class Cart {
 	public static final int MAX_NUMBERS_ORDERED = 20;
-	private ArrayList<Media> itemsOrdered = new ArrayList<Media>();
+	private ObservableList<Media> itemsOrdered = FXCollections.observableArrayList();
 	Media freeItem;
 	
-	public ArrayList<Media> getItemsOrdered() {
+	public ObservableList<Media> getItemsOrdered() {
 		return itemsOrdered;
 	}
 
@@ -118,8 +120,8 @@ public class Cart {
 		return null;			
 	}
 	
-	public final ArrayList<Media> sortByTitle() {
-		ArrayList<Media> itemsDisplay = this.getItemsOrdered();; // immutability
+	public final ObservableList<Media> sortByTitle() {
+		ObservableList<Media> itemsDisplay = this.getItemsOrdered();; // immutability
 		Collections.sort(itemsDisplay,Media.COMPARE_BY_TITLE_COST);  
 		return itemsDisplay;
 	}
@@ -143,9 +145,9 @@ public class Cart {
 		}
 	}
 	
-	public ArrayList<Media> searchItemByTitle(String title) {
+	public ObservableList<Media> searchItemByTitle(String title) {
 		boolean found = false;
-		ArrayList<Media> matchMedias = new ArrayList<Media>();
+		ObservableList<Media> matchMedias = FXCollections.observableArrayList();
 		for(Media media : itemsOrdered) {
 			if(media == null) break;
 			if(media.isMatch(title)) {
