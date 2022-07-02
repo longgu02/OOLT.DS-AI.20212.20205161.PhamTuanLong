@@ -1,6 +1,9 @@
 package hust.soict.globalict.aims.screen.customer.controller;
 import hust.soict.globalict.aims.cart.Cart;
 import hust.soict.globalict.aims.media.Media;
+import hust.soict.globalict.aims.playable.Playable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -57,9 +60,34 @@ public class CartController {
     		tblMedia.setItems(cart.getItemsOrdered());
     	}
     	costLabel.setText(cart.totalCost() + " $");
-    }
+    	
+    	btnPlay.setVisible(false);
+    	btnRemove.setVisible(false);
+    	
+    	tblMedia.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Media>() {
+			@Override
+			public void changed(ObservableValue<? extends Media> observable, Media oldValue, Media newValue) {
+				updateButtonBar(newValue);
+			}
+			});    
+    	}
 
-    @FXML
+    public void updateButtonBar(Media media) {
+		if(media == null) {
+			btnPlay.setVisible(false);
+			btnRemove.setVisible(false);
+		}else {
+			btnRemove.setVisible(true);
+			if(media instanceof Playable) {
+				btnPlay.setVisible(true);
+			}else {
+				btnPlay.setVisible(false);
+			}
+		}
+		
+	}
+
+	@FXML
     void btnPlayPressed(ActionEvent event) {
 
     }
