@@ -1,6 +1,6 @@
 package hust.soict.globalict.aims.media;
-import java.util.Arrays;
-
+import hust.soict.globalict.aims.exception.MediaValidationException;
+import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.playable.Playable;
 public class DigitalVideoDisc extends Media implements Playable{
 	private String director;
@@ -17,22 +17,26 @@ public class DigitalVideoDisc extends Media implements Playable{
 		super(title);
 	}
 	
-	public DigitalVideoDisc(String title, String category, String director, float cost) {
-		super(title, category, cost);
-		this.director = director;
+	public DigitalVideoDisc(String title, String category, String director, float cost) throws MediaValidationException {
+			super(title, category, cost);			
+			this.director = director;
 	}
 
-	public DigitalVideoDisc(String title, String category, float cost) {
+	public DigitalVideoDisc(String title, String category, float cost) throws MediaValidationException {
 		super(title, category, cost);
 	}
-	public DigitalVideoDisc(String title, String category, String director, int length, float cost) {
+	public DigitalVideoDisc(String title, String category, String director, int length, float cost) throws MediaValidationException {
 		super(title, category, cost);
 		this.director = director;
 		this.length = length;
 	}
-	public void play() {
-		System.out.println("Playing DVD: " + this.getTitle());
-		System.out.println("DVD length: " + this.getLength());
+	public void play() throws PlayerException {
+		if(this.getLength() > 0) {
+			System.out.println("Playing DVD: " + this.getTitle());
+			System.out.println("DVD length: " + this.getLength());			
+		}else {
+			throw new PlayerException("ERROR: DVD length is non-positive!");
+		}
 	}
 	
 	@Override

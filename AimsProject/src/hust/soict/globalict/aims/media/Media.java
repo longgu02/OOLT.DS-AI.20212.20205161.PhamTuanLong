@@ -6,6 +6,7 @@ import java.util.Comparator;
 
 import hust.soict.globalict.aims.comparator.MediaSortByCostTitle;
 import hust.soict.globalict.aims.comparator.MediaSortByTitleCost;
+import hust.soict.globalict.aims.exception.MediaValidationException;
 
 public class Media implements Comparable<Media>{
 	private int id;
@@ -15,15 +16,26 @@ public class Media implements Comparable<Media>{
 	private LocalDateTime dateAdded;
 	private static int nbDigitalVideoDiscs = 0;
 	// Constructors
-	public Media(String title, String category, float cost) {
+	public Media(String title, String category, float cost) throws MediaValidationException{
 		super();
-		nbDigitalVideoDiscs++;
-		this.id = nbDigitalVideoDiscs;
-		this.dateAdded = LocalDateTime.now();
-		this.title = title;
-		this.category = category;
-		this.cost = cost;
-		
+		if(title != null) {
+			this.title = title;
+		}else {
+			throw new MediaValidationException("ERROR: Entered Title string is invalid!");
+		}
+		if(category != null) {
+			this.category = category;
+		}else {
+			throw new MediaValidationException("ERROR: Entered Category string is invalid!");
+		}
+		if(cost > 0) {
+			this.cost = cost;
+		}else {
+			throw new MediaValidationException("ERROR: Entered cost must be non-positive");
+		}
+			nbDigitalVideoDiscs++;
+			this.id = nbDigitalVideoDiscs;
+			this.dateAdded = LocalDateTime.now();
 	}
 	
 	public String toString() {
@@ -75,21 +87,34 @@ public class Media implements Comparable<Media>{
 	}
 	
 	public boolean equals(Object o) {
-		if(!(o instanceof Media)) return false;
-		Media obj = (Media)o;
-		if(obj.getId() == id) {
-			return true;
+		try {
+			if(!(o instanceof Media)) return false;
+			Media obj = (Media)o;
+			if(obj.getId() == id) {
+				return true;
+			}
+		}catch(NullPointerException e) {
+			e.printStackTrace();
+		}catch(ClassCastException e) {
+			e.printStackTrace();
 		}
 		return false;
 	}
 
 	public int compareTo(Media obj) {
-		if(!(obj instanceof Media)) return -1;
-		Media castMedia = (Media)obj;
-		int compareTitle = title.compareTo(castMedia.getTitle());
-		int compareCategory = category.compareTo(castMedia.getCategory());
-		if(compareTitle == 0) return compareCategory;
-		return compareTitle;
+		try {
+			if(!(obj instanceof Media)) return -1;
+			Media castMedia = (Media)obj;
+			int compareTitle = title.compareTo(castMedia.getTitle());
+			int compareCategory = category.compareTo(castMedia.getCategory());
+			if(compareTitle == 0) return compareCategory;
+			return compareTitle;			
+		}catch(NullPointerException e) {
+			e.printStackTrace();
+		}catch(ClassCastException e) {
+			e.printStackTrace();
+		}
+		return -1;
 	}
 	
 	public static final Comparator<Media> COMPARE_BY_COST_TITLE = new MediaSortByCostTitle();
