@@ -6,6 +6,7 @@ import java.util.Scanner;
 import javax.naming.LimitExceededException;
 
 import hust.soict.globalict.aims.cart.Cart;
+import hust.soict.globalict.aims.exception.MediaValidationException;
 import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.media.Book;
 import hust.soict.globalict.aims.media.CompactDisc;
@@ -103,9 +104,11 @@ public class Aims {
 		int idDelete = Integer.parseInt(keyboard.nextLine()); 
 		Media result = cart.searchItemById(idDelete);
 		if(result != null) {
-			boolean removed = cart.removeMedia(result);
-			if(removed) {
-				cart.printCart();				
+			try {
+				cart.removeMedia(result);
+				cart.printCart();							
+			}catch(NullPointerException e) {
+				System.err.println(e.getMessage());
 			}
 		}else {
 			System.out.println("Media with the id \"" + idDelete + "\" not found");
@@ -150,14 +153,14 @@ public class Aims {
 		}
 	}
 	
-	public static void seeMediaDetail() {
+	public static void seeMediaDetail() throws MediaValidationException {
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Enter Media's title: ");
 		String titleStr = keyboard.nextLine();
 		store.MediaDetail(titleStr);
 	}
 	
-	public static void updateStore() {
+	public static void updateStore() throws MediaValidationException {
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("You want to add or remove Media? (a/r)");
 		char updateChoice = keyboard.next().charAt(0);
@@ -216,7 +219,7 @@ public class Aims {
 		}
 	}
 	
-	public static void showMenu() throws PlayerException{
+	public static void showMenu() throws PlayerException, MediaValidationException{
 		while(true) {
 			System.out.println("AIMS: ");
 			System.out.println("--------------------------------");
@@ -253,7 +256,7 @@ public class Aims {
 		}
 	}
 	
-	public static void storeMenu() throws PlayerException{
+	public static void storeMenu() throws PlayerException, MediaValidationException{
 		while(true) {
 			System.out.println("Options: ");
 			System.out.println("--------------------------------");
@@ -340,7 +343,7 @@ public class Aims {
 			}
 		}
 	}
-	public static void main(String[] args) throws PlayerException{
+	public static void main(String[] args) throws PlayerException, MediaValidationException{
 //		MemoryDaemon myMemoryDaemon = new MemoryDaemon();
 //		MyThread myThread1 = new MyThread();
 //		MyThread myThread2 = new MyThread();
@@ -351,8 +354,15 @@ public class Aims {
 //		
 //
 //		myMemoryDaemon.run();
-		Media media1 = new DigitalVideoDisc("Star Wars", "Science Fiction", "George Lucas", 87, 24.95f);
-		Media media2 = new DigitalVideoDisc("Star Warss", "Science Fiction", "George Lucas", 87, 24.95f);
+		Media media1 = null;
+		Media media2 = null;
+		try {
+			media1 = new DigitalVideoDisc("Star Wars", "Science Fiction", "George Lucas", 87, 24.95f);
+			media2 = new DigitalVideoDisc("Star Warss", "Science Fiction", "George Lucas", 87, 24.95f);
+		} catch (MediaValidationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Object hehe = new Object();
 //		if(media1.equals(hehe)) System.out.println("True");
 //		else System.out.println("False");

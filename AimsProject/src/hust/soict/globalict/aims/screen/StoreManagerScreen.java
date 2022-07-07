@@ -23,6 +23,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import hust.soict.globalict.aims.cart.Cart;
+import hust.soict.globalict.aims.exception.MediaValidationException;
 import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.media.Book;
 import hust.soict.globalict.aims.media.CompactDisc;
@@ -155,7 +156,7 @@ public class StoreManagerScreen extends JFrame{
 		return center;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws MediaValidationException {
 		Store store = new Store();
 		Media media1 = new DigitalVideoDisc("DVD1", "Science Fiction", "George Lucas", 87, 24.95f);
 		store.addMedia(media1);

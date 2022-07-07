@@ -1,4 +1,5 @@
 package hust.soict.globalict.aims.media;
+import hust.soict.globalict.aims.exception.MediaValidationException;
 import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.playable.Playable;
 public class DigitalVideoDisc extends Media implements Playable{
@@ -16,15 +17,15 @@ public class DigitalVideoDisc extends Media implements Playable{
 		super(title);
 	}
 	
-	public DigitalVideoDisc(String title, String category, String director, float cost) {
-		super(title, category, cost);
-		this.director = director;
+	public DigitalVideoDisc(String title, String category, String director, float cost) throws MediaValidationException {
+			super(title, category, cost);			
+			this.director = director;
 	}
 
-	public DigitalVideoDisc(String title, String category, float cost) {
+	public DigitalVideoDisc(String title, String category, float cost) throws MediaValidationException {
 		super(title, category, cost);
 	}
-	public DigitalVideoDisc(String title, String category, String director, int length, float cost) {
+	public DigitalVideoDisc(String title, String category, String director, int length, float cost) throws MediaValidationException {
 		super(title, category, cost);
 		this.director = director;
 		this.length = length;

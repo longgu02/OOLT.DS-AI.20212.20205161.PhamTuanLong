@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import hust.soict.globalict.aims.exception.MediaValidationException;
 import hust.soict.globalict.aims.media.DigitalVideoDisc;
 import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.store.Store;
@@ -35,8 +36,22 @@ public class AddDigitalVideoDiscToStoreScreen extends AddItemToStoreScreen{
 	private class ButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Media newDVD = new DigitalVideoDisc(titleInput.getText(), categoryInput.getText(), directorInput.getText(),Integer.parseInt(lengthInput.getText()), Float.parseFloat(costInput.getText()));
-			store.addMedia(newDVD);
+			Media newDVD = null;
+			try {
+				newDVD = new DigitalVideoDisc(titleInput.getText(), categoryInput.getText(), directorInput.getText(),Integer.parseInt(lengthInput.getText()), Float.parseFloat(costInput.getText()));
+			} catch (NumberFormatException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (MediaValidationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				store.addMedia(newDVD);
+			} catch (MediaValidationException e1) {
+				// TODO Auto-generated catch block
+				System.err.println(e1.getMessage());
+			}
 			titleInput.setText("");
 			categoryInput.setText("");
 			directorInput.setText("");

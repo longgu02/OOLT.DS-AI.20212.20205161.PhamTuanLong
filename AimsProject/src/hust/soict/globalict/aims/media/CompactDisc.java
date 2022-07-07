@@ -1,6 +1,7 @@
 package hust.soict.globalict.aims.media;
 import java.util.ArrayList;
 
+import hust.soict.globalict.aims.exception.MediaValidationException;
 import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.playable.Playable;
 
@@ -8,7 +9,7 @@ public class CompactDisc extends Media implements Playable{
 	private String artist;
 	private ArrayList<Track> tracks = new ArrayList<Track>();
 
-	public CompactDisc(String title, String category,String artist ,float cost) {
+	public CompactDisc(String title, String category,String artist ,float cost) throws MediaValidationException {
 		super(title, category, cost);
 		this.artist = artist;
 		// TODO Auto-generated constructor stub

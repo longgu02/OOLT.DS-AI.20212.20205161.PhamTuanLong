@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import hust.soict.globalict.aims.exception.MediaValidationException;
 import hust.soict.globalict.aims.media.Book;
 import hust.soict.globalict.aims.media.CompactDisc;
 import hust.soict.globalict.aims.media.Media;
@@ -31,8 +32,20 @@ public class AddCompactDiscToStoreScreen extends AddItemToStoreScreen{
 	private class ButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Media newBook = new CompactDisc(titleInput.getText(), categoryInput.getText(), artistInput.getText(), Float.parseFloat(costInput.getText()));
-			store.addMedia(newBook);
+			Media newBook = null;
+			try {
+				newBook = new CompactDisc(titleInput.getText(), categoryInput.getText(), artistInput.getText(), Float.parseFloat(costInput.getText()));
+			} catch (NumberFormatException | MediaValidationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				store.addMedia(newBook);
+			} catch (MediaValidationException e1) {
+				// TODO Auto-generated catch block
+				System.err.println(e1.getMessage());
+				e1.printStackTrace();
+			}
 			titleInput.setText("");
 			categoryInput.setText("");
 			costInput.setText("");

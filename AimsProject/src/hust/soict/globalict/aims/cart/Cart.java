@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.naming.LimitExceededException;
 
+import hust.soict.globalict.aims.exception.DuplicateException;
 import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.playable.Playable;
@@ -18,17 +19,17 @@ public class Cart {
 		return itemsOrdered;
 	}
 
-	public void addMedia(Media media) {
-		if(itemsOrdered.size() >= MAX_NUMBERS_ORDERED) {
-			System.out.println("Cart is full");
+	public void addMedia(Media media) throws DuplicateException ,LimitExceededException{
+		if(itemsOrdered.size() < MAX_NUMBERS_ORDERED) {
+			if(!itemsOrdered.contains(media)) {
+				itemsOrdered.add(media);	
+				System.out.println("Added " + media.getTitle() + " to cart");			
+			}else {
+				throw new DuplicateException(media.getTitle() + " have already been added to cart");
+			}
 			return;
-		}
-		// Consider the circumstances that cannot add
-		if(!itemsOrdered.contains(media)) {
-			itemsOrdered.add(media);	
-			System.out.println("Added " + media.getTitle() + " to cart");			
 		}else {
-			System.out.println(media.getTitle() + " have already been added to cart");
+			throw new LimitExceededException("ERROR: The number of media has reached its limit");
 		}
 	}
 	
@@ -47,13 +48,11 @@ public class Cart {
 			}
 		}
 	}
-	public boolean removeMedia(Media media) {
+	public void removeMedia(Media media) throws NullPointerException{
 		if(itemsOrdered.contains(media)) {
 			itemsOrdered.remove(media);
-			return true;
 		}else {
-			System.out.println("\"" + media.getTitle() + "\" haven't been added to cart");
-			return false;
+			throw new NullPointerException("ERROR: Media have not been add to cart");
 		}
 	}
 	

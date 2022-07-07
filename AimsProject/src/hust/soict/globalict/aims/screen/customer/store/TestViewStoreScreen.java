@@ -1,5 +1,6 @@
 package hust.soict.globalict.aims.screen.customer.store;
 
+import hust.soict.globalict.aims.exception.MediaValidationException;
 import hust.soict.globalict.aims.media.Book;
 import hust.soict.globalict.aims.media.CompactDisc;
 import hust.soict.globalict.aims.media.DigitalVideoDisc;
@@ -27,7 +28,7 @@ public class TestViewStoreScreen extends Application{
 		primaryStage.show();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws MediaValidationException {
 		store = new Store();
 		Media media1 = new DigitalVideoDisc("DVD1", "Science Fiction", "George Lucas", 87, 24.95f);
 		store.addMedia(media1);

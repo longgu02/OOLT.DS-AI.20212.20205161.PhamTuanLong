@@ -6,13 +6,15 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.TreeMap;
 
+import hust.soict.globalict.aims.exception.MediaValidationException;
+
 public class Book extends Media{
 	private List<String> authors = new ArrayList<String>();
 	private String content;
 	private List<String> contentTokens = new ArrayList<String>();
 	private Map<String, Integer> wordFrequency = new TreeMap<String, Integer>();
 	
-	public Book(String title, String category, float cost) {
+	public Book(String title, String category, float cost) throws MediaValidationException {
 		super(title, category, cost);
 		// TODO Auto-generated constructor stub
 	}

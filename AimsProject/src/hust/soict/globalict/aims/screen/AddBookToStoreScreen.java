@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import hust.soict.globalict.aims.exception.MediaValidationException;
 import hust.soict.globalict.aims.media.Book;
 import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.store.Store;
@@ -34,13 +35,24 @@ public class AddBookToStoreScreen extends AddItemToStoreScreen{
 	private class ButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Media newBook = new Book(titleInput.getText(), categoryInput.getText(), Float.parseFloat(costInput.getText()));
+			Media newBook = null;
+			try {
+				newBook = new Book(titleInput.getText(), categoryInput.getText(), Float.parseFloat(costInput.getText()));
+			} catch (NumberFormatException | MediaValidationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			((Book)newBook).updateContent(contentInput.getText()); 
 			String[] author = authorInput.getText().split(",");
 			for(String a: author) {
 				((Book)newBook).addAuthor(a);	        	
 			}
-			store.addMedia(newBook);
+			try {
+				store.addMedia(newBook);
+			} catch (MediaValidationException e1) {
+				// TODO Auto-generated catch block
+				System.err.println(e1.getMessage());
+			}
 			titleInput.setText("");
 			categoryInput.setText("");
 			costInput.setText("");

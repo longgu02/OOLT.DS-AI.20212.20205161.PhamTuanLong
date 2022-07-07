@@ -2,6 +2,7 @@ package hust.soict.globalict.aims.store;
 
 import java.util.ArrayList;
 
+import hust.soict.globalict.aims.exception.MediaValidationException;
 import hust.soict.globalict.aims.media.Book;
 import hust.soict.globalict.aims.media.CompactDisc;
 import hust.soict.globalict.aims.media.DigitalVideoDisc;
@@ -12,50 +13,53 @@ public class Store {
 	int MAX_ORDERED_PROD = 100;
 	private ArrayList<Media> itemsInStore = new ArrayList<Media>();
 	
-	public void addMedia(Media Media) {
-		if(Media.getTitle() == null || Media.getTitle().equals("")) {
-			System.out.println("Entered Title is not valid");
+	public void addMedia(Media Media) throws MediaValidationException{
+		if(Media.getTitle() != (null) && !Media.getTitle().equals("")) {
+			int i = 0;
+			
+			if(itemsInStore.contains(Media)) {
+				System.out.println("Media already exists");
+				return;
+			}
+			itemsInStore.add(Media);
+			System.out.println("Added " + Media);
 			return;
+		}else {
+			throw new MediaValidationException("ERROR: Entered Title is not valid");
 		}
-		int i = 0;
-		
-		if(itemsInStore.contains(Media)) {
-			System.out.println("Media already exists");
-			return;
-		}
-		itemsInStore.add(Media);
-		System.out.println("Added " + Media);
 	}
 	
-	public void MediaDetail(String title) {
+	public void MediaDetail(String title) throws MediaValidationException{
 		boolean found = false;
 		// Validation
-		if(title == null || title.equals("")) {
+		if(title != null && !title.equals("")) {
 			System.out.println("Entered title is not valid");
-			return;
-		}
-		for(Media media : itemsInStore) {
-			if(media == null) break;
-			if(media.isMatch(title)) {
-				System.out.println(media.toString());
-				found = true;
+			for(Media media : itemsInStore) {
+				if(media == null) break;
+				if(media.isMatch(title)) {
+					System.out.println(media.toString());
+					found = true;
+				}
 			}
+			if(!found) System.out.println("Media with title \"" + title + "\" not found");
+			return;
+		}else {
+			throw new MediaValidationException("ERROR: Entered Title is not valid");
 		}
-		if(!found) System.out.println("Media with title \"" + title + "\" not found");
-		return;
 	}
 	
 	public ArrayList<Media> getItemsInStore() {
 		return itemsInStore;
 	}
 
-	public void removeMedia(Media Media) {
+	public void removeMedia(Media Media) throws NullPointerException{
 		int i = 0, k = 0;
 		boolean removed = false;
-		Media newItemsInStore[] = new Media[MAX_ORDERED_PROD];
 		if(itemsInStore.contains(Media)) {
 			itemsInStore.remove(Media);
 			removed = true;
+		}else {
+			throw new NullPointerException("ERROR: Media does not exists in the Store");
 		}
 		if(!removed) {
 			System.out.println("Error");
