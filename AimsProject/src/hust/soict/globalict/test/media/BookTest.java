@@ -1,10 +1,11 @@
 package hust.soict.globalict.test.media;
 
+import hust.soict.globalict.aims.exception.MediaValidationException;
 import hust.soict.globalict.aims.media.Book;
 import hust.soict.globalict.aims.media.Media;
 
 public class BookTest {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws MediaValidationException {
 		Media media = new Book("Aladin", "Animation", 18.99f);
 		((Book)media).addAuthor("Long");
 		((Book)media).addAuthor("Minh");
