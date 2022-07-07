@@ -75,21 +75,34 @@ public class Media implements Comparable<Media>{
 	}
 	
 	public boolean equals(Object o) {
-		if(!(o instanceof Media)) return false;
-		Media obj = (Media)o;
-		if(obj.getId() == id) {
-			return true;
+		try {
+			if(!(o instanceof Media)) return false;
+			Media obj = (Media)o;
+			if(obj.getId() == id) {
+				return true;
+			}
+		}catch(NullPointerException e) {
+			e.printStackTrace();
+		}catch(ClassCastException e) {
+			e.printStackTrace();
 		}
 		return false;
 	}
 
 	public int compareTo(Media obj) {
-		if(!(obj instanceof Media)) return -1;
-		Media castMedia = (Media)obj;
-		int compareTitle = title.compareTo(castMedia.getTitle());
-		int compareCategory = category.compareTo(castMedia.getCategory());
-		if(compareTitle == 0) return compareCategory;
-		return compareTitle;
+		try {
+			if(!(obj instanceof Media)) return -1;
+			Media castMedia = (Media)obj;
+			int compareTitle = title.compareTo(castMedia.getTitle());
+			int compareCategory = category.compareTo(castMedia.getCategory());
+			if(compareTitle == 0) return compareCategory;
+			return compareTitle;			
+		}catch(NullPointerException e) {
+			e.printStackTrace();
+		}catch(ClassCastException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 	
 	public static final Comparator<Media> COMPARE_BY_COST_TITLE = new MediaSortByCostTitle();

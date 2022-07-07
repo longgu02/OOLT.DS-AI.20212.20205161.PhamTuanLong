@@ -1,16 +1,19 @@
 package hust.soict.globalict.aims.screen.customer.controller;
+import hust.soict.globalict.aims.cart.Cart;
 import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.playable.Playable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 
 public class ItemController {
 	private Media media;
-
+	private Cart cart;
     @FXML
     private Button btnAddToCart;
 
@@ -23,7 +26,13 @@ public class ItemController {
     @FXML
     private Label lblCost;
     
-    public void setData(Media media) {
+    
+    public ItemController(Cart cart) {
+		super();
+		this.cart = cart;
+	}
+
+	public void setData(Media media) {
     	this.media = media;
     	lblTitle.setText(media.getTitle());
     	lblCost.setText(media.getCost() + " $");
@@ -37,12 +46,17 @@ public class ItemController {
 
     @FXML
     void btnAddToCartClicked(ActionEvent event) {
-
+    	cart.addMedia(media);
     }
 
     @FXML
     void btnPlayClicked(ActionEvent event) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Playing Media");
+		alert.setHeaderText(null);
+		alert.setContentText("Playing " + media.getTitle());
 
+		alert.showAndWait();
     }
 
 }

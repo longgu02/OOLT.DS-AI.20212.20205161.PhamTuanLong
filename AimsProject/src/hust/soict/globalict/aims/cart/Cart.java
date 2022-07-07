@@ -1,8 +1,10 @@
 package hust.soict.globalict.aims.cart;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.naming.LimitExceededException;
+
+import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.playable.Playable;
 import javafx.collections.FXCollections;
@@ -30,19 +32,18 @@ public class Cart {
 		}
 	}
 	
-	public void addMedia(Media[] medias) {
-		// Consider the circumstances that cannot add
+	public void addMedia(Media[] medias) throws LimitExceededException {
 		for(Media media: medias) {
-			if(itemsOrdered.size() >= MAX_NUMBERS_ORDERED) {
-				System.out.println("Cart is full");
-				break;
-			}
-			if(media == null) break;
-			if(!itemsOrdered.contains(media)) {
-				itemsOrdered.add(media);	
-				System.out.println("Added " + media.getTitle() + " to cart");			
+			if(itemsOrdered.size() < MAX_NUMBERS_ORDERED) {
+				if(media == null) break;
+				if(!itemsOrdered.contains(media)) {
+					itemsOrdered.add(media);	
+					System.out.println("Added " + media.getTitle() + " to cart");			
+				}else {
+					System.out.println(media.getTitle() + " have already been added to cart");
+				}
 			}else {
-				System.out.println(media.getTitle() + " have already been added to cart");
+				throw new LimitExceededException("ERROR: The number of " + "media has reached its limit");
 			}
 		}
 	}
@@ -103,9 +104,16 @@ public class Cart {
 		}
 		System.out.println("Total cost: " + String.format("%.2f", totalCost()));
 		System.out.println("**************************************************");
-
 	}
 	
+	public Media getFreeItem() {
+		return freeItem;
+	}
+
+	public void setFreeItem(Media freeItem) {
+		this.freeItem = freeItem;
+	}
+
 	public Media searchItemById(int id) {
 		Media result;
 		boolean found = false;
@@ -159,11 +167,15 @@ public class Cart {
 		return null;
 	}
 	
-	public void play(Media media) {
-		if(media instanceof Playable) {
-			((Playable) media).play();
-		}else {
-			System.out.println("Cannot play this type of Media (" + media.toString() + ")");
+	public void play(Media media) throws PlayerException {
+		try {
+			if(media instanceof Playable) {
+				((Playable) media).play();
+			}else {
+				System.out.println("Cannot play this type of Media (" + media.toString() + ")");
+			}
+		}catch(PlayerException e){
+			throw e;
 		}
 	}
 	

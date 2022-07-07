@@ -1,26 +1,47 @@
 package hust.soict.globalict.aims.screen.customer.controller;
 import java.io.IOException;
 
+import hust.soict.globalict.aims.cart.Cart;
 import hust.soict.globalict.aims.store.Store;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 public class ViewStoreController {
     @FXML
     private GridPane gridPane;
 
 	private Store store;
+	private Cart cart = new Cart();
 	public ViewStoreController(Store store) {
 		this.store = store;
+	}
+	public ViewStoreController(Store store, Cart cart) {
+		this.store = store;
+		this.cart = cart;
 	}
 	
     @FXML
     void btnViewCartPressed(ActionEvent event) {
-    	
+    	try {
+    		final String CART_FXML_FILE_PATH = "/hust/soict/globalict/aims/screen/customer/view/Cart.fxml";
+    		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(CART_FXML_FILE_PATH));
+    		fxmlLoader.setController(new CartController(store, cart));
+    		Parent root = fxmlLoader.load();
+    		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+    		stage.setScene(new Scene(root));
+    		stage.setTitle("Cart");
+    		stage.show();
+    	}catch(IOException e) {
+    		e.printStackTrace();
+    	}
     }
 	@FXML
 	public void initialize() {
@@ -31,7 +52,7 @@ public class ViewStoreController {
 			try {
 				FXMLLoader fxmlLoader = new FXMLLoader();
 				fxmlLoader.setLocation(getClass().getResource(ITEM_FXML_FILE_PATH));
-				ItemController itemController = new ItemController();
+				ItemController itemController = new ItemController(cart);
 				fxmlLoader.setController(itemController);
 				AnchorPane anchorPane = new AnchorPane();
 				anchorPane = fxmlLoader.load();

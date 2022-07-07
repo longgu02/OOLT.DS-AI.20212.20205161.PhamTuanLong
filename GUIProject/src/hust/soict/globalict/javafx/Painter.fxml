@@ -16,11 +16,11 @@
    <left>
       <VBox maxHeight="1.7976931348623157E308" spacing="8.0" BorderPane.alignment="CENTER">
          <children>
-            <TitledPane animated="false" text="untitled">
+            <TitledPane animated="false" text="Tools">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="74.0" prefWidth="109.0">
                      <children>
-                        <RadioButton layoutX="11.0" layoutY="14.0" mnemonicParsing="false" text="Pen">
+                        <RadioButton layoutX="11.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Pen">
                            <toggleGroup>
                               <ToggleGroup fx:id="identical" />
                            </toggleGroup>

@@ -3,7 +3,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Scanner;
 
+import javax.naming.LimitExceededException;
+
 import hust.soict.globalict.aims.cart.Cart;
+import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.media.Book;
 import hust.soict.globalict.aims.media.CompactDisc;
 import hust.soict.globalict.aims.media.DigitalVideoDisc;
@@ -28,27 +31,35 @@ public class Aims {
         }
 	}
 	
-	public static void playMediaInCart() {
+	public static void playMediaInCart() throws PlayerException {
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Enter the media title that you want to play");
 		String searchTitle = keyboard.nextLine();
 		ObservableList<Media> matchMedias = cart.searchItemByTitle(searchTitle);
-		for(Media media: matchMedias) {
-			cart.play(media);
+		try {
+			for(Media media: matchMedias) {
+				cart.play(media);
+			}			
+		}catch(PlayerException e){
+			throw e;
 		}
 	}
 	
-	public static void playMedia() {
+	public static void playMedia() throws PlayerException{
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Enter the media title that you want to play");
 		String searchTitle = keyboard.nextLine();
 		Media[] matchMedia = store.searchByTitle(searchTitle);
 		for(Media media: matchMedia) {
 			if(media == null) break;
-			if(media instanceof Playable) {
-				((Playable) media).play();
-			}else {
-				System.out.println("Cannot play this type of Media (" + media.toString() + ")");
+			try {
+				if(media instanceof Playable) {
+					((Playable) media).play();
+				}else {
+					System.out.println("Cannot play this type of Media (" + media.toString() + ")");
+				}				
+			}catch(PlayerException e) {
+				throw e;
 			}
 		}
 	}
@@ -125,13 +136,18 @@ public class Aims {
 		System.out.println("Enter the Media's title: ");
 		String titleSearch = keyboard.nextLine().strip();
 		// Maybe search by exact title?
-		Media[] result = store.searchByTitle(titleSearch);
-		if(result == null) {
-			System.out.println("No Media found");
-			return;
+		try {
+			Media[] result = store.searchByTitle(titleSearch);
+			if(result == null) {
+				System.out.println("No Media found");
+				return;
+			}
+			cart.addMedia(result);
+			cart.printCart();
+			
+		}catch(LimitExceededException e) {
+			e.printStackTrace();
 		}
-		cart.addMedia(result);
-		cart.printCart();
 	}
 	
 	public static void seeMediaDetail() {
@@ -200,7 +216,7 @@ public class Aims {
 		}
 	}
 	
-	public static void showMenu() {
+	public static void showMenu() throws PlayerException{
 		while(true) {
 			System.out.println("AIMS: ");
 			System.out.println("--------------------------------");
@@ -214,7 +230,11 @@ public class Aims {
 			int choice = keyboard.nextInt();
 			switch(choice) {
 			case 1:
-				storeMenu();
+				try {
+					storeMenu();					
+				}catch(PlayerException e) {
+					throw e;
+				}
 				break;
 			case 2:
 				updateStore();
@@ -233,7 +253,7 @@ public class Aims {
 		}
 	}
 	
-	public static void storeMenu() {
+	public static void storeMenu() throws PlayerException{
 		while(true) {
 			System.out.println("Options: ");
 			System.out.println("--------------------------------");
@@ -257,7 +277,11 @@ public class Aims {
 				cartMenu();
 				break;
 			case 4:
-				playMedia();
+				try {
+					playMedia();					
+				}catch(PlayerException e) {
+					throw e;
+				}
 				break;
 			case 0:
 				break;
@@ -270,7 +294,7 @@ public class Aims {
 		}
 	}
 	
-	public static void cartMenu() {
+	public static void cartMenu() throws PlayerException{
 		while(true) {
 			System.out.println("Options: ");
 			System.out.println("--------------------------------");
@@ -295,7 +319,11 @@ public class Aims {
 				removeMediaFromCart();
 				break;
 			case 4:
-				playMediaInCart();
+				try {
+					playMediaInCart();					
+				}catch(PlayerException e) {
+					throw e;
+				}
 				break;
 			case 5:
 				placeOrder();
@@ -312,7 +340,7 @@ public class Aims {
 			}
 		}
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws PlayerException{
 //		MemoryDaemon myMemoryDaemon = new MemoryDaemon();
 //		MyThread myThread1 = new MyThread();
 //		MyThread myThread2 = new MyThread();
@@ -329,6 +357,10 @@ public class Aims {
 //		if(media1.equals(hehe)) System.out.println("True");
 //		else System.out.println("False");
 		System.out.println(media1.compareTo(media2));
-		showMenu();
+		try {
+			showMenu();			
+		}catch(PlayerException err) {
+			throw err;
+		}
 	}
 }

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -23,6 +23,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import hust.soict.globalict.aims.cart.Cart;
+import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.media.Book;
 import hust.soict.globalict.aims.media.CompactDisc;
 import hust.soict.globalict.aims.media.DigitalVideoDisc;
@@ -37,7 +38,7 @@ public class StoreManagerScreen extends JFrame{
 	private Container cp;
 	private JPanel center;
 	
-	public StoreManagerScreen(Store store) {
+	public StoreManagerScreen(Store store) throws PlayerException{
 		this.store = store;
 		AddDVD = new AddDigitalVideoDiscToStoreScreen(store);
 		AddBook = new AddBookToStoreScreen(store);
@@ -45,7 +46,11 @@ public class StoreManagerScreen extends JFrame{
 		cp = getContentPane();
 		cp.setLayout(new BorderLayout());
 		cp.add(createNorth(), BorderLayout.NORTH);
-		cp.add(createCenter(), BorderLayout.CENTER);
+		try {
+			cp.add(createCenter(), BorderLayout.CENTER);			
+		}catch(PlayerException e) {
+			throw e;
+		}
 		
 		setTitle("Store");
 		setSize(1024, 768);
@@ -80,7 +85,16 @@ public class StoreManagerScreen extends JFrame{
 				}else if (itemName.equals("Add DVD")){
 					cp.add(AddDVD.getPanel(), BorderLayout.CENTER);
 				}else if(itemName.equals("View store")){
-					cp.add(createCenter(), BorderLayout.CENTER);
+					try {
+						cp.add(createCenter(), BorderLayout.CENTER);						
+					}catch(PlayerException err) {
+						JDialog playDialog = new JDialog();
+						JLabel playLabel = new JLabel(err.getMessage());
+						playDialog.add(playLabel, BorderLayout.CENTER);
+						playDialog.setTitle("Illegal DVD length");
+						playDialog.setSize(500,500);
+						playDialog.setVisible(true);
+					}
 				}
 				cp.repaint();
 				cp.revalidate();
@@ -124,15 +138,19 @@ public class StoreManagerScreen extends JFrame{
 		return header;	
 	}
 	
-	JPanel createCenter() {
+	JPanel createCenter() throws PlayerException{
 		center = new JPanel();
 		center.setLayout(new GridLayout(3, 3, 2, 2));
 		Cart cart = new Cart();
 		
 		ArrayList<Media> mediaInStore = store.getItemsInStore();
 		for(Media media: mediaInStore) {
-			MediaStore cell = new MediaStore(media, cart);
-			center.add(cell);
+			try {
+				MediaStore cell = new MediaStore(media, cart);
+				center.add(cell);				
+			}catch(PlayerException e) {
+				throw e;
+			}
 		}
 		return center;
 	}
@@ -157,8 +175,16 @@ public class StoreManagerScreen extends JFrame{
 		store.addMedia(media8);
 		Media media9 = new Book("Book4", "Science Fiction", 24.95f);
 		store.addMedia(media9);
-		
-		new StoreManagerScreen(store);
+		try {
+			new StoreManagerScreen(store);			
+		}catch(PlayerException err) {
+			JDialog playDialog = new JDialog();
+			JLabel playLabel = new JLabel(err.getMessage());
+			playDialog.add(playLabel, BorderLayout.CENTER);
+			playDialog.setTitle("Illegal DVD length");
+			playDialog.setSize(500,500);
+			playDialog.setVisible(true);
+		}
 	}
 
 }

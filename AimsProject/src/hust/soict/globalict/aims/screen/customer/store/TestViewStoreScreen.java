@@ -47,6 +47,8 @@ public class TestViewStoreScreen extends Application{
 		store.addMedia(media8);
 		Media media9 = new Book("Book4", "Science Fiction", 24.95f);
 		store.addMedia(media9);
+		Media media10 = new Book("Book4", "Science Fiction", 24.95f);
+		store.addMedia(media10);
 		launch(args);
 	}
 }

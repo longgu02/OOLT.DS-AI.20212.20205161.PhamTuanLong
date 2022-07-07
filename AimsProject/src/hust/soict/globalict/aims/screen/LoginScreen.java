@@ -1,14 +1,18 @@
 package hust.soict.globalict.aims.screen;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
+import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.store.Store;
 
 public class LoginScreen extends JFrame{
@@ -43,7 +47,16 @@ public class LoginScreen extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(managerBtn.isSelected()) {
-					new StoreManagerScreen(store);
+					try {
+						new StoreManagerScreen(store);						
+					}catch(PlayerException err) {
+						JDialog playDialog = new JDialog();
+						JLabel playLabel = new JLabel(err.getMessage());
+						playDialog.add(playLabel, BorderLayout.CENTER);
+						playDialog.setTitle("Illegal DVD length");
+						playDialog.setSize(500,500);
+						playDialog.setVisible(true);
+					}
 					dispose();
 				}
 			}
